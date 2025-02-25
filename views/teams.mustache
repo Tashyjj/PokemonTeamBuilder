@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>All Teams</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <h1>Teams</h1>
+  <ul>
+    {{#teams}}
+      <li>
+        <a href="/teams/{{id}}">{{team_name}}</a>
+      </li>
+    {{/teams}}
+  </ul>
+  <a href="/">Back to Home</a>
+</body>
+</html>
