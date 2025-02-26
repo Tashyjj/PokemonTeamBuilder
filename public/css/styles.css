@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+.teams-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.team-card {
+    background: white;
+    padding: 15px;
+    margin: 10px;
+    width: 200px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pokemon-list button {
+    background: #ffcc00;
+    border: none;
+    padding: 5px;
+    margin: 3px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.team-actions button {
+    margin: 5px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.high { color: green; }
+.medium { color: orange; }
+.low { color: red; }

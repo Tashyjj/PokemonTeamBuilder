@@ -1,12 +1,53 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-  <title>{{title}}</title>
-  <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Team Builder</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <h1>{{title}}</h1>
-  <a href="/teams">View Teams</a>
+
+    <h1>Pokémon Team Builder</h1>
+
+    {{> nav}}
+
+    <a href="/teams">
+        <button type="button">View Teams</button>
+    </a>
+
+    <a href="/create">
+        <button type="button">Create New Team</button>
+    </a>
+
+
+
+    <div class="teams-container">
+        {{#teams}}
+        <div class="team-card">
+            <h2>{{team_name}}</h2>
+            <p>Effectiveness: {{effectiveness}}%</p>
+            
+            <p>Types: 
+                {{#types_summary}}
+                    <span>{{.}}</span> 
+                {{/types_summary}}
+            </p>
+
+            <div class="pokemon-list">
+                {{#pokemon_list}}
+                    <button>{{.}}</button> 
+                {{/pokemon_list}}
+            </div>
+
+            <div class="team-actions">
+                <a href="/team/{{id}}"><button>Details</button></a>
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
+        </div>
+        {{/teams}}
+    </div>
+
 </body>
 </html>

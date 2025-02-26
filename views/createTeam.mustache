@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Your Custon New Team!!</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    {{> nav}}
+    
+    <h1>Create a New Team</h1>
+
+    <form action="/create" method="POST">
+        <input type="text" name="name" placeholder="Team Name" required>
+        <input type="text" name="pokemons" placeholder="Pokémon (comma-separated)" required>
+        <input type="text" name="types" placeholder="Types (comma-separated)" required>
+        <button type="submit">Add Team</button>
+    </form>
+
+    <p><a href="/">Back to Home</a></p>
+</body>
+</html>

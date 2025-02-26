@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{team.name}} - Team Details</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+
+    {{> nav}}
+    
+    <h1>{{team.name}} - Team Details</h1>
+
+    <p>Effectiveness: {{team.effectiveness}}%</p>
+
+    <p>Types: 
+        {{#team.types}}
+            <span>{{.}}</span> 
+        {{/team.types}}
+    </p>
+
+    <h3>Pokémon:</h3>
+    <ul>
+        {{#team.pokemons}}
+            <li>{{.}}</li>
+        {{/team.pokemons}}
+    </ul>
+
+    <a href="/">Back to Teams</a>
+
+</body>
+</html>

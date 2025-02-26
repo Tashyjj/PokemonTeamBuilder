@@ -1,19 +1,39 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-  <title>All Teams</title>
-  <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <h1>Teams</h1>
-  <ul>
-    {{#teams}}
-      <li>
-        <a href="/teams/{{id}}">{{team_name}}</a>
-      </li>
-    {{/teams}}
-  </ul>
-  <a href="/">Back to Home</a>
+
+    <h1>Teams</h1>
+
+    {{> nav}}
+
+    <a href="/">Back to Home</a>
+
+    <div class="teams-container">
+        {{#teams}}
+        <div class="team-card">
+            <h2>{{team_name}}</h2>
+            <p>Effectiveness: {{effectiveness}}%</p>
+
+            <p>Types: 
+                {{#types_summary}}
+                    <span>{{.}}</span> 
+                {{/types_summary}}
+            </p>
+
+            <div class="pokemon-list">
+                {{#pokemon_list}}
+                    <button>{{.}}</button> 
+                {{/pokemon_list}}
+            </div>
+        </div>
+        {{/teams}}
+    </div>
+
 </body>
 </html>
