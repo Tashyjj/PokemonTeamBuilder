@@ -1,11 +1,40 @@
+@font-face {
+  font-family: 'GBA';
+  src: url('/fonts/GBfont.woff2') format('woff2'),
+      url('/fonts/GBfont.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 100px;
+  height: 100vh;
+  text-align: center;
+}
+h1 {
+  margin: 0.5rem 0;
+  font-family: 'GBA', Arial, sans-serif;
+  font-size: 60px;
+}
+
+
 body {
-  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'GBA', Arial, sans-serif;
+  font-size: 30px;
   text-align: center;
   position: relative;
   z-index: 0;
@@ -28,11 +57,10 @@ body::after {
 }
 
 .pokeballmain {
+  margin: 1rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
-  width: 100%;
 }
 .pokeballmain img {
   width: 300px;
@@ -90,7 +118,7 @@ body::after {
     padding: 5px;
   }
   .menu-button img {
-    width: 30px; 
+    width: 70px; 
     height: auto;
   }
   
@@ -98,12 +126,12 @@ body::after {
   .dropdown-content {
     display: none;
     position: absolute;
-    top: 55px; 
+    top: 70px; 
     right: 0;
     background-color: white;
     box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     border-radius: 10px;
-    width: 200px;
+    width: 250px;
   }
   .dropdown-content a {
     display: block;
