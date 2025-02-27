@@ -1,9 +1,24 @@
-<!-- views/partials/nav.mustache -->
-<div class="dropdown">
-  <button class="dropbtn">Menu</button>
-  <div class="dropdown-content">
+<div class="menu-container">
+  <button class="menu-button" onclick="toggleMenu()">
+    <img src="/images/pokeballMenu.svg" alt="Menu Icon" />
+  </button>
+
+  <!-- dropdown -->
+  <div id="dropdownMenu" class="dropdown-content">
     <a href="/">Home</a>
     <a href="/teams">View Teams</a>
     <a href="/create">Create New Team</a>
   </div>
 </div>
+
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("dropdownMenu");
+  if (menu.style.display === "block") {
+    menu.style.display = "none";
+  } else {
+    menu.style.display = "block";
+  }
+}
+</script>

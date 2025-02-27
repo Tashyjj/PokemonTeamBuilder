@@ -24,12 +24,11 @@ router.get("/team/:id", (req, res) => {
 
 // Home Route
 router.get("/", (req, res) => {
-    res.render("index",{ 
+    res.render("index", { 
         title: "Pokemon Team Builder",
-        message: "Welcome to the Pokemon Team Builder!" 
-    },
-    { partials: { nav: "partials/nav" } }
-    );
+        message: "Welcome to the Pokemon Team Builder!",
+        partials: { nav: "partials/nav" }
+    });
 });
 
 // Route to show all teams
