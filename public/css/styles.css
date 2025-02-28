@@ -67,6 +67,68 @@ body::after {
   height: auto;
 }
 
+.mainButton {
+  position: relative;
+  top: -200px;
+  appearance: button;
+  background-color: #e25412;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: #313131;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'GBA',sans-serif;
+  font-weight: 700;
+  letter-spacing: .8px;
+  line-height: 20px;
+  margin: 10px;
+  outline: none;
+  overflow: visible;
+  padding: 20px 50px;
+  text-align: center;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 100%;
+  font-size: 35px;
+}
+.mainButton:after {
+  background-clip: padding-box;
+  background-color: #ee5315;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  bottom: -4px;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
+.mainButton,
+.mainButton:focus {
+  user-select: auto;
+}
+.mainButton:hover:not(:disabled) {
+  filter: brightness(1.1);
+  -webkit-filter: brightness(1.1);
+}
+.mainButton:disabled {
+  cursor: auto;
+}
+.mainButton:active {
+  border-width: 4px 0 0;
+  background: none;
+}
+
 .teams-container {
     display: flex;
     flex-wrap: wrap;
