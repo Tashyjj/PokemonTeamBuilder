@@ -49,36 +49,34 @@ router.get("/teams", (req, res) => {
     });
 });
 
+
 // New team
 
 router.get("/create", (req, res) => {
-    res.render("createTeam"); // Renders the new page
+    res.render("createTeam");
 });
 
 router.post("/create", (req, res) => {
-    const { name, pokemons, types } = req.body;
 
-    // Ill have to fix this effectuiveness later, generating random effectiveness for now
+    console.log(req.body);
+
+    const teamName = req.body.name;
+    const pokemons = req.body.pokemons;
+    const types = req.body.types;
+
+    console.log(`36 ${pokemons}`);
+    
+    //still random effectiveness for now
     const effectiveness = Math.random() * 100;
     const createdAt = new Date().toISOString();
-
-    // Database instertion
-    const pokemonList = pokemons ? pokemons.split(",").map(p => p.trim()).join(",") : "";
-    const typesSummary = types ? types.split(",").map(t => t.trim()).join(",") : "";
-    const db = require("../models/TeamsDB").db;
-    db.run(
-        "INSERT INTO teams (team_name, pokemon_list, types_summary, effectiveness, created_at) VALUES (?, ?, ?, ?, ?)",
-        [name, pokemonList, typesSummary, effectiveness, createdAt],
-        function (err) {
-            if (err) {
-                console.error("Error inserting new team:", err);
-                res.status(500).send("Error saving team");
-            } else {
-                res.redirect("/teams");
-            }
+  
+    TeamsDB.insertTeam(teamName, pokemons, types, effectiveness, createdAt, (err) => {
+        if (err) {
+            console.error("Error inserting new team:", err);
+            return res.status(500).send("Error saving team");
         }
-    );
+        res.redirect("/teams");
+    });
 });
   
-
 module.exports = router;

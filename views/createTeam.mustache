@@ -1,23 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Create Your Custon New Team!!</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create New Team</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .form-container {
+      background: rgba(255, 255, 255, 0.9);
+      border: 3px solid #e25412;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 400px;
+      margin: 50px auto;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    h1 {
+      color: #e25412;
+      margin-bottom: 20px;
+    }
+    label {
+      color: #333;
+      font-size: 0.9em;
+    }
+    input[type="text"] {
+      width: 90%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 2px solid #ffcb05;
+      border-radius: 5px;
+      font-size: 1em;
+      outline: none;
+    }
+    input[type="submit"] {
+      background: #e25412;
+      color: #ffcb05;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.3s;
+    }
+    input[type="submit"]:hover {
+      background: rgb(155, 56, 10);
+    }
+    .pokemon-fields {
+        font-size: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+    .pokemon-fields input {
+        width: 35%;
+        font-size: 16px;
+        min-width: 120px;
+    }
+
+    #teamName {
+        font-size: 16px;
+    }
+    #teamName::placeholder {
+        font-size: 16px;
+    }
+
+  </style>
 </head>
+
 <body>
 
     {{> nav}}
-    
-    <h1>Create a New Team</h1>
 
-    <form action="/create" method="POST">
-        <input type="text" name="name" placeholder="Team Name" required>
-        <input type="text" name="pokemons" placeholder="Pokémon (comma-separated)" required>
-        <input type="text" name="types" placeholder="Types (comma-separated)" required>
-        <button type="submit">Add Team</button>
-    </form>
+    <div class="form-container">
+        <h1>Create New Team</h1>
+        <form action="/create" method="POST">
+        <div>
+            <label for="teamName">Team Name:</label><br>
+            <input type="text" id="teamName" name="name" placeholder="Example: Elite 4 Team" required>
+        </div>
 
-    <p><a href="/">Back to Home</a></p>
+        <br>
+
+
+
+        <div>
+            <label>Pokemons (1 per box):</label><br>
+            <div class="pokemon-fields">
+            <input type="text" name="pokemons" placeholder="Pikachu" required>
+            <input type="text" name="pokemons" placeholder="Pikachu" required>
+            <input type="text" name="pokemons" placeholder="Pikachu" required>
+            <input type="text" name="pokemons" placeholder="Pikachu" required>
+            <input type="text" name="pokemons" placeholder="Pikachu" required>
+            <input type="text" name="pokemons" placeholder="Cant all be Pikachu" required>
+            </div>
+        </div>
+        <br>
+
+        <div>
+            <label for="Types">Types:</label><br>
+            <input type="text" id="Types" name="types" placeholder="Electric,Dark,etc" required>
+        </div>
+        <br>
+        <input type="submit" value="Create Team!">
+        </form>
+
+    </div>
 </body>
 </html>
