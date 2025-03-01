@@ -50,21 +50,21 @@ router.get("/teams", (req, res) => {
 });
 
 
-// New team
 
 router.get("/create", (req, res) => {
     res.render("createTeam");
 });
 
-router.post("/create", (req, res) => {
 
-    console.log(req.body);
+  
+// New team
+
+
+router.post("/create", (req, res) => {
 
     const teamName = req.body.name;
     const pokemons = req.body.pokemons;
     const types = req.body.types;
-
-    console.log(`36 ${pokemons}`);
     
     //still random effectiveness for now
     const effectiveness = Math.random() * 100;
@@ -74,6 +74,20 @@ router.post("/create", (req, res) => {
         if (err) {
             console.error("Error inserting new team:", err);
             return res.status(500).send("Error saving team");
+        }
+        res.redirect("/teams");
+    });
+});
+
+
+//delete team
+
+router.post("/delete/:id", (req, res) => {
+    const teamId = req.params.id;
+    TeamsDB.deleteTeam(teamId, (err) => {
+        if (err) {
+            console.error("Error deleting team:", err);
+            return res.status(500).send("Error deleting team");
         }
         res.redirect("/teams");
     });

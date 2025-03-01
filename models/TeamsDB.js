@@ -18,13 +18,6 @@ db.serialize(() => { //figured it out
 exports.insertTeam = (teamName, pokemons, types, effectiveness, createdAt, callback) => {
     const pokemonList = Array.isArray(pokemons) ? pokemons.join(",") : "";
     const typesSummary = types;
-    
-    console.log(`1${pokemonList}`);
-    console.log(`2${typesSummary}`);
-    console.log(`3${effectiveness}`);
-    console.log(`4${createdAt}`);
-    console.log(`5${pokemons}`);
-
 
     db.run(
       `INSERT INTO teams (team_name, pokemon_list, types_summary, moves_stats, effectiveness, created_at)
@@ -32,7 +25,6 @@ exports.insertTeam = (teamName, pokemons, types, effectiveness, createdAt, callb
       [teamName, pokemonList, typesSummary, null, effectiveness, createdAt],
       callback
     );
-    console.log("Team added");
   };
 
 //getting all teams
@@ -46,5 +38,11 @@ exports.getTeamById = (id, callback) => {
 };
 
 //gonna add the other fucntionality here too later
+
+//deleting teams
+exports.deleteTeam = (id, callback) => {
+    db.run("DELETE FROM teams WHERE id = ?", [id], callback);
+};
+  
 
 exports.db = db;
