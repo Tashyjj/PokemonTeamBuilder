@@ -56,28 +56,55 @@ router.get("/create", (req, res) => {
 });
 
 
-  
+
 // New team
 
 
-router.post("/create", (req, res) => {
+router.post("/create", async (req, res) => {
+    try{
+        const teamName = req.body.name;
+        const pokemons = req.body.pokemons;
+        const sanitizedPokemons = pokemons.map(p => p.trim().toLowerCase());
 
-    const teamName = req.body.name;
-    const pokemons = req.body.pokemons;
-    const types = req.body.types;
+        //API call
+        const pokemonTypePromises = sanitizedPokemons.map(async (pokemonName) => {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data for ${pokemonName}`);
+            }
+            const data = await response.json();
+
+            return data.types.map(t => t.type.name);
+        });
+
+        const typesArrays = await Promise.all(pokemonTypePromises);
+
+        //this is to remove duplicates
+        const typeSet = new Set();
+        typesArrays.forEach(types => {
+            types.forEach(t => typeSet.add(t));
+        });
+        const typesSummary = Array.from(typeSet).join(".");
+        
+        //still random effectiveness for now
+        const effectiveness = Math.random() * 100;
+        const createdAt = new Date().toISOString();
     
-    //still random effectiveness for now
-    const effectiveness = Math.random() * 100;
-    const createdAt = new Date().toISOString();
-  
-    TeamsDB.insertTeam(teamName, pokemons, types, effectiveness, createdAt, (err) => {
-        if (err) {
-            console.error("Error inserting new team:", err);
-            return res.status(500).send("Error saving team");
-        }
-        res.redirect("/teams");
-    });
+        TeamsDB.insertTeam(teamName, pokemons, typesSummary, effectiveness, createdAt, (err) => {
+            if (err) {
+                console.error("Error inserting new team:", err);
+                return res.status(500).send("Error saving team");
+            }
+            res.redirect("/teams");
+        });
+    } catch (err) {
+        console.error("Error creating team:", err);
+        res.status(500).send("Error creating team");
+    }
 });
+
+
+
 
 
 //delete team
