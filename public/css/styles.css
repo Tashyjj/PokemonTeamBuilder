@@ -67,6 +67,9 @@ body::after {
   height: auto;
 }
 
+/*----------------------------------  */
+/*adding these becuase I want to copy this button style, just marking where it starts/ends*/
+
 .mainButton {
   position: relative;
   top: -200px;
@@ -129,23 +132,115 @@ body::after {
   background: none;
 }
 
+/*Ends here*/
+/*----------------------------------  */
+
+.submitButton {
+  position: relative;
+  appearance: button;
+  background-color: #e25412;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: #313131;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'GBA',sans-serif;
+  font-weight: 700;
+  letter-spacing: .8px;
+  line-height: 20px;
+  outline: none;
+  overflow: visible;
+  padding: 20px 30px;
+  text-align: center;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 100%;
+  font-size: 35px;
+}
+.submitButton:after {
+  background-clip: padding-box;
+  background-color: #ee5315;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  bottom: -4px;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
+.submitButton,
+.submitButton:focus {
+  user-select: auto;
+}
+.submitButton:hover:not(:disabled) {
+  filter: brightness(1.1);
+  -webkit-filter: brightness(1.1);
+}
+.submitButton:disabled {
+  cursor: auto;
+}
+.submitButton:active {
+  border-width: 4px 0 0;
+  background: none;
+}
+
+/*----------------------------------  */
+
 .teams-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: column;
+    
+    gap: 20px;
+}
+.team-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 0px;
+}
+.team-card {
+  background: white;
+  padding: 15px;
+  margin: 10px 0;
+  width: 200px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+.team-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  margin-top: 100px; /*so it lines up better with the card*/
 }
 
 .team-card {
-    background: white;
-    padding: 15px;
-    margin: 10px;
-    width: 200px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  background: white;
+  padding: 15px;
+  margin: 10px;
+  width: 200px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
-
+.pokemon-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, auto);
+  gap: 10px;
+  justify-items: center; 
+  align-items: center;
+}
 .pokemon-list button {
-    background: #ffcc00;
+    background: #5bbeff;
     border: none;
     padding: 5px;
     margin: 3px;
@@ -166,6 +261,37 @@ body::after {
 
   /*----------------------------------  */
 
+
+  .detailsButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+  .detailsButton img {
+    width: 40px; 
+    height: auto;
+  }
+  .editButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+  .editButton img {
+    width: 40px; 
+    height: auto;
+  }
+  .deleteButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+  .deleteButton img {
+    width: 40px; 
+    height: auto;
+  }
 
   .menu-container {
     position: fixed;

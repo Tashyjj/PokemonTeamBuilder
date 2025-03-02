@@ -12,35 +12,48 @@
 
     {{> nav}}
 
-    <a href="/">Back to Home</a>
-
     <div class="teams-container">
         {{#teams}}
-        <div class="team-card">
-        <h2>{{team_name}}</h2>
-        <p>Effectiveness: {{effectiveness}}%</p>
-        <p>Types: 
-            {{#types_summary}}
-                <span>{{.}}</span>
-            {{/types_summary}}
-        </p>
-        <div class="pokemon-list">
-            {{#pokemon_list}}
-            <button>{{.}}</button>
-            {{/pokemon_list}}
-        </div>
-        <div class="team-actions">
-            <a href="/team/{{id}}"><button>Details</button></a>
-            <button>Edit</button>
-            
-            <form action="/delete/{{id}}" method="POST" style="display: inline;">
-            <button type="submit">Delete</button>
-            </form>
-        </div>
-        </div>
+            <div class="team-wrapper">
+            <!-- have to wrap this ^ to get everything to be one -->
+            <div class="team-card">
+                <h2>{{team_name}}</h2>
+                <p>Effectiveness: {{effectiveness}}%</p>
+                <p>Types:
+                {{#types_summary}}
+                    <span>{{.}}</span>
+                {{/types_summary}}
+                </p>
+                <div class="pokemon-list">
+                {{#pokemon_list}}
+                    <a href="https://pokemondb.net/pokedex/{{.}}" target="_blank">
+                        <button>{{.}}</button>
+                    </a>
+                {{/pokemon_list}}
+                </div>
+            </div>
 
+            <!-- then these guys on the right -->
+            <div class="team-actions">
+                <a href="/team/{{id}}">
+                    <button class="detailsButton">
+                        <img src="/images/detailsIcon.png" alt="Details Icon" />
+                    </button>
+                </a>
+                <button class="editButton">
+                    <img src="/images/editIcon.png" alt="Edit Icon" />
+                </button>
+                <form action="/delete/{{id}}" method="POST" style="display: inline;">
+                <button class="deleteButton" type="submit">
+                    <img src="/images/deleteIcon.png" alt="Delete Icon" />
+                </button>
+                </form>
+            </div>
+            </div>
+            
         {{/teams}}
-    </div>
+</div>
+
 
 </body>
 </html>
