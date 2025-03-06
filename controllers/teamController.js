@@ -67,6 +67,9 @@ router.post("/create", async (req, res) => {
     let pokemons = Array.isArray(req.body.pokemons) ? req.body.pokemons : [req.body.pokemons];
 
     for (const name of pokemons) {
+
+        if (name.trim() === "") continue;
+
         if (!validPokemonSet.has(name.trim().toLowerCase())) {
             return res.status(400).send(`Invalid pokemon: ${name}`);
         }
