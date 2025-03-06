@@ -1,4 +1,4 @@
-const validPokemon = new Set([
+/*const validPokemon = new Set([
     "Bulbasaur", "Ivysaur", "Venusaur",
     "Charmander", "Charmeleon", "Charizard",
     "Squirtle", "Wartortle", "Blastoise",
@@ -50,8 +50,11 @@ const validPokemon = new Set([
     "Zapdos", "Moltres", "Dratini",
     "Dragonair", "Dragonite", "Mewtwo",
     "Mew"
-]);
+]);*/
 
+//const validPokemon = req.app.locals.validPokemon;
+
+console.log("Valid Pokemon:", [...validPokemon]);
 
 document.querySelectorAll('input[name="pokemons"]').forEach(input => {
 
@@ -59,7 +62,7 @@ document.querySelectorAll('input[name="pokemons"]').forEach(input => {
     //blur bcuz I want it to happen right after I click off the box
     input.addEventListener('blur', () => {
 
-        const val = input.value.trim();
+        const val = input.value.trim().toLowerCase();
         //fields can be empty now, but at least one should be filled but ill check that on submission
         if (val === "") {
             input.setCustomValidity("");

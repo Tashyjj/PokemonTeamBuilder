@@ -52,7 +52,7 @@ router.get("/teams", (req, res) => {
 
 
 router.get("/create", (req, res) => {
-    res.render("createTeam");
+    res.render("createTeam", { validPokemonArray: req.app.locals.validPokemonArray });
 });
 
 
@@ -61,10 +61,32 @@ router.get("/create", (req, res) => {
 
 
 router.post("/create", async (req, res) => {
+
+
+    const validPokemonSet = req.app.locals.validPokemonSet;
+    let pokemons = Array.isArray(req.body.pokemons) ? req.body.pokemons : [req.body.pokemons];
+
+    for (const name of pokemons) {
+        if (!validPokemonSet.has(name.trim().toLowerCase())) {
+            return res.status(400).send(`Invalid pokemon: ${name}`);
+        }
+    }
+
     try{
+
         const teamName = req.body.name;
-        const pokemons = req.body.pokemons;
-        const sanitizedPokemons = pokemons.map(p => p.trim().toLowerCase());
+
+        //sometimes it doesnt treat it as an array, like if theres only one pokemon
+        if (!Array.isArray(pokemons)) {
+            pokemons = [pokemons];
+        }
+
+        //I think the blank entries are causing issues w/ API call
+        const sanitizedPokemons = pokemons.filter(p => p && p.trim() !== "").map(p => p.trim().toLowerCase());
+
+        if (sanitizedPokemons.length === 0) {
+            return res.status(400).send("Please enter at least one Pokemon");
+        }
 
         //API call
         const pokemonTypePromises = sanitizedPokemons.map(async (pokemonName) => {
@@ -82,15 +104,18 @@ router.post("/create", async (req, res) => {
         //this is to remove duplicates
         const typeSet = new Set();
         typesArrays.forEach(types => {
-            types.forEach(t => typeSet.add(t));
+            if (Array.isArray(types)) {
+                types.forEach(t => typeSet.add(t));
+            }
+            
         });
-        const typesSummary = Array.from(typeSet).join(".");
+        const typesSummary = Array.from(typeSet).join(",");
         
         //still random effectiveness for now
         const effectiveness = Math.random() * 100;
         const createdAt = new Date().toISOString();
     
-        TeamsDB.insertTeam(teamName, pokemons, typesSummary, effectiveness, createdAt, (err) => {
+        TeamsDB.insertTeam(teamName, sanitizedPokemons, typesSummary, effectiveness, createdAt, (err) => {
             if (err) {
                 console.error("Error inserting new team:", err);
                 return res.status(500).send("Error saving team");
