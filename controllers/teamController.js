@@ -146,10 +146,21 @@ router.get("/team/:id/edit", (req, res) => {
       //making arrays again
       team.pokemon_list = team.pokemon_list ? team.pokemon_list.split(",") : [];
       team.types_summary = team.types_summary ? team.types_summary.split(",") : [];
+
+      //funny array thats gonna hold the pokemons already in the team
+      const slots = 6;
+      const pokemonSlots = [];
+      for (let i = 0; i < slots; i++) {
+        
+        pokemonSlots.push(team.pokemon_list[i] || "");
+
+      }
+
+      team.pokemonSlots = pokemonSlots;
       
       res.render("editTeam", { team });
     });
-  });
+});
   
 
 router.post("/team/:id/edit", async (req, res) => {
