@@ -6,19 +6,20 @@ const router = express.Router();
 const TeamsDB = require("../models/TeamsDB");
 
 // Route to get details of a specific team
-router.get("/team/:id", (req, res) => {
+router.get("/team/:id/edit", (req, res) => {
     const teamId = parseInt(req.params.id);
     TeamsDB.getTeamById(teamId, (err, team) => {
         if (err || !team) {
             console.error("Error fetching team:", err);
             res.status(404).send("Team not found");
-        } else {
-            // Convert stored string data back to arrays
-            team.pokemon_list = team.pokemon_list ? team.pokemon_list.split(",") : [];
-            team.types_summary = team.types_summary ? team.types_summary.split(",") : [];
-
-            res.render("teamDetails", { team });
         }
+
+        // Converting stored string data back to arrays
+        team.pokemon_list = team.pokemon_list ? team.pokemon_list.split(",") : [];
+        team.types_summary = team.types_summary ? team.types_summary.split(",") : [];
+
+        res.render("editTeam", { team });
+        
     });
 });
 
@@ -132,6 +133,69 @@ router.post("/create", async (req, res) => {
 });
 
 
+
+//updating a team
+
+router.post("/team/:id/edit", async (req, res) => {
+    const teamId = parseInt(req.params.id);
+    let pokemons = Array.isArray(req.body.pokemons) ? req.body.pokemons : [req.body.pokemons];
+
+
+    const sanitizedPokemons = pokemons.filter(p => p && p.trim() !== "").map(p => p.trim().toLowerCase());
+
+    if (sanitizedPokemons.length === 0) {
+        return res.status(400).send("Please enter at least one Pokemon");
+    }
+
+    //MOORRREEEEE FORM VALIDATION
+    const validPokemonSet = req.app.locals.validPokemonSet;
+    for (const name of sanitizedPokemons) {
+        if (!validPokemonSet.has(name)) {
+            return res.status(400).send(`Invalid Pokémon: ${name}`);
+        }
+    }
+
+    //typing again
+    try {
+        const pokemonTypePromises = sanitizedPokemons.map(async (pokemonName) => {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data for ${pokemonName}`);
+            }
+        const data = await response.json();
+        return data.types.map(t => t.type.name);
+        });
+
+
+        const typesArrays = await Promise.all(pokemonTypePromises);
+        const typeSet = new Set();
+        typesArrays.forEach(types => {
+            if (Array.isArray(types)) {
+                types.forEach(t => typeSet.add(t));
+            }
+        });
+        const typesSummary = Array.from(typeSet).join(",");
+
+
+        const teamName = req.body.name;
+
+    
+        TeamsDB.updateTeam(teamId, teamName, sanitizedPokemons, typesSummary, (err) => {
+            if (err) {
+                console.error("Error updating team:", err);
+                return res.status(500).send("Error updating team");
+            }
+            res.redirect(`/team/${teamId}`);
+        });
+
+    } catch (err) {
+        console.error("Error processing updated team:", err);
+        res.status(500).send("Error processing updated team");
+    }
+
+    
+});
+  
 
 
 

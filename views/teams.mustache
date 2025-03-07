@@ -40,9 +40,11 @@
                         <img src="/images/detailsIcon.png" alt="Details Icon" />
                     </button>
                 </a>
-                <button class="editButton">
-                    <img src="/images/editIcon.png" alt="Edit Icon" />
-                </button>
+                <a href="/team/{{id}}/edit">
+                    <button class="editButton">
+                        <img src="/images/editIcon.png" alt="Edit Icon" />
+                    </button>
+                </a>
                 <form action="/delete/{{id}}" method="POST" style="display: inline;">
                 <button class="deleteButton" type="submit">
                     <img src="/images/deleteIcon.png" alt="Delete Icon" />

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{team.name}} - Team Details</title>
+    <title>{{team.team_name}} - Team Details</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
@@ -11,24 +11,24 @@
 
     {{> nav}}
     
-    <h1>{{team.name}} - Team Details</h1>
+    <h1>{{team.team_name}} - Team Details</h1>
 
     <p>Effectiveness: {{team.effectiveness}}%</p>
 
     <p>Types: 
-        {{#team.types}}
+        {{#team.types_summary}}
             <span>{{.}}</span> 
-        {{/team.types}}
+        {{/team.types_summary}}
     </p>
 
     <h3>Pokémon:</h3>
     <ul>
-        {{#team.pokemons}}
+        {{#team.pokemon_list}}
             <li>{{.}}</li>
-        {{/team.pokemons}}
+        {{/team.pokemon_list}}
     </ul>
 
-    <a href="/">Back to Teams</a>
+    <a href="/teams">Back to Teams</a>
 
 </body>
 </html>

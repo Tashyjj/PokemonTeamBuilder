@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit {{team.team_name}} - Team Details</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  {{> nav}}
+
+  <div class="form-container">
+    <h1>Edit Team: {{team.team_name}}</h1>
+    <form action="/team/{{team.id}}/edit" method="POST">
+      <div>
+        <label for="teamName">Team Name:</label><br>
+        <input type="text" id="teamName" name="name" value="{{team.team_name}}" required>
+      </div>
+      <br>
+      <div>
+        <label>Pokemons (one per box):</label><br>
+        <div class="pokemon-fields">
+          {{#pokemon_list}}
+            <input type="text" name="pokemons" value="{{.}}">
+          {{/pokemon_list}}
+          <!-- for now just gonna have static empty boxes but probably dynamic in the future -->
+          <input type="text" name="pokemons" placeholder="Add Pokemon">
+          <input type="text" name="pokemons" placeholder="Add Pokemon">
+        </div>
+      </div>
+      <br>
+      
+      <input type="submit" value="Update Team!">
+    </form>
+  </div>
+</body>
+</html>
