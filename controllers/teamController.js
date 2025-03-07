@@ -6,7 +6,7 @@ const router = express.Router();
 const TeamsDB = require("../models/TeamsDB");
 
 // Route to get details of a specific team
-router.get("/team/:id/edit", (req, res) => {
+router.get("/team/:id", (req, res) => {
     const teamId = parseInt(req.params.id);
     TeamsDB.getTeamById(teamId, (err, team) => {
         if (err || !team) {
@@ -18,7 +18,7 @@ router.get("/team/:id/edit", (req, res) => {
         team.pokemon_list = team.pokemon_list ? team.pokemon_list.split(",") : [];
         team.types_summary = team.types_summary ? team.types_summary.split(",") : [];
 
-        res.render("editTeam", { team });
+        res.render("teamDetails", { team });
         
     });
 });
@@ -136,6 +136,22 @@ router.post("/create", async (req, res) => {
 
 //updating a team
 
+router.get("/team/:id/edit", (req, res) => {
+    const teamId = parseInt(req.params.id);
+    TeamsDB.getTeamById(teamId, (err, team) => {
+      if (err || !team) {
+        console.error("Error fetching team:", err);
+        return res.status(404).send("Team not found");
+      }
+      //making arrays again
+      team.pokemon_list = team.pokemon_list ? team.pokemon_list.split(",") : [];
+      team.types_summary = team.types_summary ? team.types_summary.split(",") : [];
+      
+      res.render("editTeam", { team });
+    });
+  });
+  
+
 router.post("/team/:id/edit", async (req, res) => {
     const teamId = parseInt(req.params.id);
     let pokemons = Array.isArray(req.body.pokemons) ? req.body.pokemons : [req.body.pokemons];
@@ -193,7 +209,7 @@ router.post("/team/:id/edit", async (req, res) => {
         res.status(500).send("Error processing updated team");
     }
 
-    
+
 });
   
 
