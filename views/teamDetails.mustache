@@ -15,20 +15,27 @@
 
     <p>Effectiveness: {{team.effectiveness}}%</p>
 
-    <p>Types: 
-        {{#team.types_summary}}
-            <span>{{.}}</span> 
-        {{/team.types_summary}}
-    </p>
+        <p>Types:</p>
+        <div class="team-details-types">
+            {{#team.types_summary}}
+                <div class="type-item-details">
+                    <img class="type-img-details" src="/images/{{.}}Type.png" alt="{{.}} type">
+                    <p class="type-name-details">{{.}}</p>
+                </div>
+            {{/team.types_summary}}
+        </div>
+
 
     <h3>Pokémon:</h3>
     <ul>
         {{#team.pokemon_list}}
-            <li>{{.}}</li>
+            <li class="pokemon_names">{{.}}</li>
         {{/team.pokemon_list}}
     </ul>
-
-    <a href="/teams">Back to Teams</a>
-
+    <div>
+        <a href="/teams">
+                <button class="mainButton teamDetailsButton" role="button">Back to Teams</button>
+        </a>
+    </div>
 </body>
 </html>
