@@ -46,13 +46,13 @@ exports.deleteTeam = (id, callback) => {
   
 
 //updating teams
-exports.updateTeam = (teamId, teamName, pokemons, typesSummary, callback) => {
+exports.updateTeam = (teamId, teamName, pokemons, typesSummary, effectiveness, callback) => {
     const pokemonList = Array.isArray(pokemons) ? pokemons.join(",") : "";
     db.run(
         `UPDATE teams 
         SET team_name = ?, pokemon_list = ?, types_summary = ?
         WHERE id = ?`,
-        [teamName, pokemonList, typesSummary, teamId],
+        [teamName, pokemonList, typesSummary, teamId, effectiveness],
         callback
     );
 };

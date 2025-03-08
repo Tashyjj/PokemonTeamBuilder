@@ -99,24 +99,26 @@ router.post("/create", async (req, res) => {
                 throw new Error(`Failed to fetch data for ${pokemonName}`);
             }
             const data = await response.json();
-
-            return data.types.map(t => t.type.name);
+            return{
+                types: data.types.map(t => t.type.name),
+                base_experience: data.base_experience,
+            };
+            
         });
 
-        const typesArrays = await Promise.all(pokemonTypePromises);
+        const pokemonDataArray = await Promise.all(pokemonTypePromises);
 
         //this is to remove duplicates
         const typeSet = new Set();
-        typesArrays.forEach(types => {
-            if (Array.isArray(types)) {
-                types.forEach(t => typeSet.add(t));
-            }
-            
+        let totalExp = 0;
+        pokemonDataArray.forEach(pokemonData => {
+            pokemonData.types.forEach(t => typeSet.add(t));
+            totalExp += pokemonData.base_experience;
         });
         const typesSummary = Array.from(typeSet).join(",");
         
-        //still random effectiveness for now
-        const effectiveness = Math.random() * 100;
+        //fixing effectiveness
+        const effectiveness = totalExp / sanitizedPokemons.length;
         const createdAt = new Date().toISOString();
     
         TeamsDB.insertTeam(teamName, sanitizedPokemons, typesSummary, effectiveness, createdAt, (err) => {
@@ -182,7 +184,7 @@ router.post("/team/:id/edit", async (req, res) => {
         }
     }
 
-    //typing again
+    //typing and effectiveness again
     try {
         const pokemonTypePromises = sanitizedPokemons.map(async (pokemonName) => {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
@@ -190,24 +192,27 @@ router.post("/team/:id/edit", async (req, res) => {
                 throw new Error(`Failed to fetch data for ${pokemonName}`);
             }
         const data = await response.json();
-        return data.types.map(t => t.type.name);
-        });
+        return{
+            types: data.types.map(t => t.type.name),
+            base_experience: data.base_experience,
+        };
+    });
 
 
-        const typesArrays = await Promise.all(pokemonTypePromises);
+        const pokemonDataArray = await Promise.all(pokemonTypePromises);
         const typeSet = new Set();
-        typesArrays.forEach(types => {
-            if (Array.isArray(types)) {
-                types.forEach(t => typeSet.add(t));
-            }
+        let totalExp = 0;
+        pokemonDataArray.forEach(pokemonData => {
+            pokemonData.types.forEach(t => typeSet.add(t));
+            totalExp += pokemonData.base_experience;
         });
         const typesSummary = Array.from(typeSet).join(",");
-
+        const effectiveness = totalExp / sanitizedPokemons.length;
 
         const teamName = req.body.name;
 
     
-        TeamsDB.updateTeam(teamId, teamName, sanitizedPokemons, typesSummary, (err) => {
+        TeamsDB.updateTeam(teamId, teamName, sanitizedPokemons, typesSummary, effectiveness, (err) => {
             if (err) {
                 console.error("Error updating team:", err);
                 return res.status(500).send("Error updating team");
