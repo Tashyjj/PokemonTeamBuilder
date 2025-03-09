@@ -11,27 +11,35 @@
 
     {{> nav}}
     
+    <div class="pokemon-detail">
+        <div class="pokemon-info">
+            <h2 class="pokemon-name-details">{{name}}</h2>
+            <div class="pokemon-types">
+                {{#types}}
+                    <div class="type-item">
+                    <img class="type-img-details" src="/images/{{.}}Type.png" alt="{{.}} type">
+                    <span class="type-name-details">{{.}}</span>
+                    </div>
+                {{/types}}
+            </div>
+        </div>
+
+        <div class="pokemon-stats">
+            {{#stats}}
+            <div class="stat">
+                <span class="stat-name">{{name}}:</span>
+                <span class="stat-value">{{base_stat}}</span>
+            </div>
+            {{/stats}}
+        </div>
+    </div>
+    
     <h1>{{team.team_name}} - Team Details</h1>
 
     <p>Effectiveness: {{team.effectiveness}}%</p>
 
-        <p>Types:</p>
-        <div class="team-details-types">
-            {{#team.types_summary}}
-                <div class="type-item-details">
-                    <img class="type-img-details" src="/images/{{.}}Type.png" alt="{{.}} type">
-                    <p class="type-name-details">{{.}}</p>
-                </div>
-            {{/team.types_summary}}
-        </div>
+    
 
-
-    <h3>Pokémon:</h3>
-    <ul>
-        {{#team.pokemon_list}}
-            <li class="pokemon_names">{{.}}</li>
-        {{/team.pokemon_list}}
-    </ul>
     <div>
         <a href="/teams">
                 <button class="mainButton teamDetailsButton" role="button">Back to Teams</button>

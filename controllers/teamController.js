@@ -6,9 +6,9 @@ const router = express.Router();
 const TeamsDB = require("../models/TeamsDB");
 
 // Route to get details of a specific team
-router.get("/team/:id", (req, res) => {
+router.get("/team/:id", async (req, res) => {
     const teamId = parseInt(req.params.id);
-    TeamsDB.getTeamById(teamId, (err, team) => {
+    TeamsDB.getTeamById(teamId, async (err, team) => {
         if (err || !team) {
             console.error("Error fetching team:", err);
             res.status(404).send("Team not found");
@@ -17,6 +17,30 @@ router.get("/team/:id", (req, res) => {
         // Converting stored string data back to arrays
         team.pokemon_list = team.pokemon_list ? team.pokemon_list.split(",") : [];
         team.types_summary = team.types_summary ? team.types_summary.split(",") : [];
+
+        try {
+            const pokemonDetailsPromises = team.pokemon_list.map(async (pokemonName) => {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+                if (!response.ok) {
+                    //just gonna have no types if it fails
+                    return { name: pokemonName, types: [], stats: [] };
+                }
+                const data = await response.json();
+                return {
+                    name: pokemonName,
+                    types: data.types.map(t => t.type.name),
+                    stats: data.stats.map(s => ({ 
+                        name: s.stat.name, 
+                        base_stat: s.base_stat 
+                    }))
+                };
+            });
+
+            team.pokemonDetails = await Promise.all(pokemonDetailsPromises);
+        } catch (fetchErr) {
+        console.error("Error fetching Pokémon details:", fetchErr);
+        team.pokemonDetails = team.pokemon_list.map(name => ({ name, types: [], stats: [] }));
+        }
 
         res.render("teamDetails", { team });
         
