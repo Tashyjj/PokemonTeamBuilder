@@ -2,48 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{team.team_name}} - Team Details</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
-
-
+<body class="other-pages">
     {{> nav}}
-    
-    <div class="pokemon-detail">
-        <div class="pokemon-info">
-            <h2 class="pokemon-name-details">{{name}}</h2>
-            <div class="pokemon-types">
+
+    <h1>{{team.team_name}} - Team Details</h1>
+    <p>Total Base Stats: {{team.effectiveness}}</p>
+
+    <div class="team-details-wrapper">
+        {{#team.pokemonDetails}}
+
+        <div class="pokemon-box">
+            
+            <div class="pokemon-info">
+                <h2 class="pokemon-name-details">{{name}}</h2>
+                <div class="pokemon-types-details">
                 {{#types}}
                     <div class="type-item">
-                    <img class="type-img-details" src="/images/{{.}}Type.png" alt="{{.}} type">
-                    <span class="type-name-details">{{.}}</span>
+                        <img class="type-icon" src="/images/{{.}}Type.png" alt="{{.}} type">
+                        <span class="type-name-details">{{.}}</span>
                     </div>
                 {{/types}}
+                </div>
             </div>
-        </div>
 
-        <div class="pokemon-stats">
-            {{#stats}}
-            <div class="stat">
-                <span class="stat-name">{{name}}:</span>
-                <span class="stat-value">{{base_stat}}</span>
+            <div class="pokemon-stats">
+                {{#stats}}
+                <div class="stat">
+                    <span class="stat-name">{{name}}:</span>
+                    <span class="stat-value">{{base_stat}}</span>
+                </div>
+                {{/stats}}
             </div>
-            {{/stats}}
         </div>
+        {{/team.pokemonDetails}}
     </div>
-    
-    <h1>{{team.team_name}} - Team Details</h1>
 
-    <p>Effectiveness: {{team.effectiveness}}%</p>
 
-    
 
-    <div>
+
+    <div class="back-button">
         <a href="/teams">
-                <button class="mainButton teamDetailsButton" role="button">Back to Teams</button>
+            <button class="mainButton back-to-teams" role="button">BACK TO TEAMS</button>
         </a>
     </div>
+    
 </body>
 </html>

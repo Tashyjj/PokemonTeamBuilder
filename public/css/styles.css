@@ -29,16 +29,26 @@ h1 {
 
 
 body {
+  /*
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  */
   font-family: 'GBA', Arial, sans-serif;
   font-size: 30px;
   text-align: center;
   position: relative;
   z-index: 0;
 }
+
+.other-pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -253,8 +263,12 @@ body::after {
   gap: 10px;
   justify-items: center; 
   align-items: center;
+  text-transform: uppercase;
 }
 .pokemon-list button {
+  font-family: 'GBA',sans-serif;
+  font-size: 25px;
+  text-transform: uppercase;
   background: #5bbeff;
   border: none;
   padding: 5px;
@@ -358,10 +372,16 @@ body::after {
   height: auto;
 }
 
-.team-details-types .type-name-details {
+.team-details-types {
   text-transform: capitalize;
   margin-top: 5px;
   font-size: 30px;
+}
+
+.type-name-details {
+  display: block;
+  margin-top: 5px;
+  text-transform: capitalize;
 }
   
 h3 {
@@ -410,38 +430,51 @@ ul {
   align-items: center;
 }
 .type-item {
+  font-size: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  display: flex;
+  align-items: center;
 }
 .type-img-details {
   width: 40px;
   height: auto;
 }
-.team-details-wrapper {
-  width: 100%;
-  margin: 0 auto;
-  text-align: left;
-  padding: 20px;
+
+
+.back-to-teams {
+  width: 350px;
+  position: static !important;
+  top: 0 !important;
 }
 
-.pokemon-details-wrapper {
+.team-details-wrapper {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, auto);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
   gap: 20px;
   justify-items: center;
   align-items: center;
-  width: 30%;
+  width: 60%;
   margin: 0 auto;
   padding: 20px;
 }
+
 .pokemon-box {
   background: #fffbea79;
   border: 2px solid #00dee6a6;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 15px;
-  width: 250px;
+  width: 300px;
   font-family: 'GBA', sans-serif;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between; 
+  align-items: flex-start;
+  gap: 16px;
 }
 .pokemon-name-details {
   margin: 0;
@@ -452,18 +485,19 @@ ul {
   
 }
 .pokemon-types-details {
-  margin-top: 10px;
   display: flex;
-  gap: 5px;
+  gap: 30px;
+  margin-top: 10px;
 }
 .type-icon {
   width: 40px;
   height: auto;
-  margin: 0 5px;
+  
 }
 .pokemon-stats {
-  font-size: 14px;
-  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 .stat {
   display: flex;
@@ -479,5 +513,30 @@ ul {
   color: #666;
 }
 .pokemon-info {
-  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.team-details-page {
+  display: block !important;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+.team-details-page .container {
+  display: block !important;
+  height: auto !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+.team-details-page .mainButton {
+  margin-top: 50px;
+  top: 0;
+}
+
+body.team-details-page {
+  display: block !important;
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }

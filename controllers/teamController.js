@@ -18,6 +18,27 @@ router.get("/team/:id", async (req, res) => {
         team.pokemon_list = team.pokemon_list ? team.pokemon_list.split(",") : [];
         team.types_summary = team.types_summary ? team.types_summary.split(",") : [];
 
+        //renaming stat names
+
+        function renameStatName(statName) {
+            switch (statName) {
+              case "hp":
+                return "HP";
+              case "attack":
+                return "ATK";
+              case "defense":
+                return "DEF";
+              case "special-attack":
+                return "SP-ATK";
+              case "special-defense":
+                return "SP-DEF";
+              case "speed":
+                return "SPD";
+              default:
+                return statName;
+            }
+          }
+
         try {
             const pokemonDetailsPromises = team.pokemon_list.map(async (pokemonName) => {
                 const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
@@ -30,7 +51,7 @@ router.get("/team/:id", async (req, res) => {
                     name: pokemonName,
                     types: data.types.map(t => t.type.name),
                     stats: data.stats.map(s => ({ 
-                        name: s.stat.name, 
+                        name: renameStatName(s.stat.name), 
                         base_stat: s.base_stat 
                     }))
                 };
@@ -142,7 +163,7 @@ router.post("/create", async (req, res) => {
         const typesSummary = Array.from(typeSet).join(",");
         
         //fixing effectiveness
-        const effectiveness = totalExp / sanitizedPokemons.length;
+        const effectiveness = totalExp;
         const createdAt = new Date().toISOString();
     
         TeamsDB.insertTeam(teamName, sanitizedPokemons, typesSummary, effectiveness, createdAt, (err) => {
@@ -231,7 +252,7 @@ router.post("/team/:id/edit", async (req, res) => {
             totalExp += pokemonData.base_experience;
         });
         const typesSummary = Array.from(typeSet).join(",");
-        const effectiveness = totalExp / sanitizedPokemons.length;
+        const effectiveness = totalExp;
 
         const teamName = req.body.name;
 
