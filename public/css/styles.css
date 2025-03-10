@@ -215,8 +215,8 @@ body::after {
 
 .teams-container {
   display: flex;
-  flex-wrap: column;
-  
+  flex-direction: row;
+  /* flex-wrap: column; */
   gap: 20px;
 }
 .team-wrapper {
@@ -539,4 +539,30 @@ body.team-details-page {
   margin: 0;
   padding: 0;
   text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+
+  body {
+    padding-top: 600px;
+  }
+
+  #team-details-page .team-details-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  #team-details-page h1 {
+    font-size: 36px;
+  }
+
+  #team-details-page .mainButton {
+    font-size: 24px;
+    padding: 15px 30px;
+  }
+
+ .teams-container {
+    flex-direction: column;
+    margin-top: 40px;
+  }
+
 }
