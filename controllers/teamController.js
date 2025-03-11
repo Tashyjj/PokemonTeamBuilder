@@ -5,68 +5,90 @@ const express = require("express");
 const router = express.Router();
 const TeamsDB = require("../models/TeamsDB");
 
-// Route to get details of a specific team
+//effectiveness against types
+async function getTypeEffectiveness(typeName) {
+    const response = await fetch(`https://pokeapi.co/api/v2/type/${typeName}`);
+    if (!response.ok) throw new Error(`Failed to fetch type data for ${typeName}`);
+    const typeData = await response.json();
+    return {
+        doubleDamageTo: typeData.damage_relations.double_damage_to.map(t => t.name),
+    };
+}
+
+async function getPokemonDamageRelations(pokemonName) {
+
+    const pokemonRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+    if (!pokemonRes.ok) throw new Error(`Failed to fetch Pokémon: ${pokemonName}`);
+    
+    const data = await pokemonRes.json();
+
+    const typeNames = data.types.map(t => t.type.name);
+
+    const typePromises = typeNames.map(getTypeEffectiveness);
+    const typeRelationsArray = await Promise.all(typePromises);
+    
+    const allDoubleDamageTo = new Set();
+    typeRelationsArray.forEach(rel => {
+      rel.doubleDamageTo.forEach(t => allDoubleDamageTo.add(t));
+    });
+
+    function renameStatName(statName) {
+      switch (statName) {
+        case "hp": return "HP";
+        case "attack": return "ATK";
+        case "defense": return "DEF";
+        case "special-attack": return "SP-ATK";
+        case "special-defense": return "SP-DEF";
+        case "speed": return "SPD";
+        default: return statName;
+      }
+    }
+    
+    const stats = data.stats.map(s => ({
+      name: renameStatName(s.stat.name),
+      base_stat: s.base_stat
+    }));
+    
+    return {
+      name: pokemonName,
+      typeNames,
+      effectiveAgainst: Array.from(allDoubleDamageTo),
+      stats
+    };
+  }
+  
+
+//specific team route
 router.get("/team/:id", async (req, res) => {
     const teamId = parseInt(req.params.id);
     TeamsDB.getTeamById(teamId, async (err, team) => {
-        if (err || !team) {
-            console.error("Error fetching team:", err);
-            res.status(404).send("Team not found");
-        }
-
-        // Converting stored string data back to arrays
-        team.pokemon_list = team.pokemon_list ? team.pokemon_list.split(",") : [];
-        team.types_summary = team.types_summary ? team.types_summary.split(",") : [];
-
-        //renaming stat names
-
-        function renameStatName(statName) {
-            switch (statName) {
-              case "hp":
-                return "HP";
-              case "attack":
-                return "ATK";
-              case "defense":
-                return "DEF";
-              case "special-attack":
-                return "SP-ATK";
-              case "special-defense":
-                return "SP-DEF";
-              case "speed":
-                return "SPD";
-              default:
-                return statName;
-            }
-          }
-
-        try {
-            const pokemonDetailsPromises = team.pokemon_list.map(async (pokemonName) => {
-                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
-                if (!response.ok) {
-                    //just gonna have no types if it fails
-                    return { name: pokemonName, types: [], stats: [] };
-                }
-                const data = await response.json();
-                return {
-                    name: pokemonName,
-                    types: data.types.map(t => t.type.name),
-                    stats: data.stats.map(s => ({ 
-                        name: renameStatName(s.stat.name), 
-                        base_stat: s.base_stat 
-                    }))
-                };
-            });
-
-            team.pokemonDetails = await Promise.all(pokemonDetailsPromises);
-        } catch (fetchErr) {
+      if (err || !team) {
+        console.error("Error fetching team:", err);
+        return res.status(404).send("Team not found");
+      }
+      
+      team.pokemon_list = team.pokemon_list ? team.pokemon_list.split(",") : [];
+      team.types_summary = team.types_summary ? team.types_summary.split(",") : [];
+      
+      try {
+        const pokemonDetailsPromises = team.pokemon_list.map(pokemonName => 
+          getPokemonDamageRelations(pokemonName.toLowerCase())
+        );
+        team.pokemonDetails = await Promise.all(pokemonDetailsPromises);
+      } catch (fetchErr) {
         console.error("Error fetching Pokémon details:", fetchErr);
-        team.pokemonDetails = team.pokemon_list.map(name => ({ name, types: [], stats: [] }));
-        }
-
-        res.render("teamDetails", { team });
-        
+        team.pokemonDetails = team.pokemon_list.map(name => ({
+          name,
+          typeNames: [],
+          effectiveAgainst: [],
+          stats: []
+        }));
+      }
+      
+      res.render("teamDetails", { team });
     });
-});
+  });
+  
 
 // Home Route
 router.get("/", (req, res) => {
@@ -100,8 +122,6 @@ router.get("/teams", (req, res) => {
 router.get("/create", (req, res) => {
     res.render("createTeam", { validPokemonArray: req.app.locals.validPokemonArray });
 });
-
-
 
 // New team
 
@@ -165,7 +185,7 @@ router.post("/create", async (req, res) => {
         //fixing effectiveness
         const effectiveness = totalExp;
         const createdAt = new Date().toISOString();
-    
+        effectiveness.toFixed(1);
         TeamsDB.insertTeam(teamName, sanitizedPokemons, typesSummary, effectiveness, createdAt, (err) => {
             if (err) {
                 console.error("Error inserting new team:", err);
@@ -225,7 +245,7 @@ router.post("/team/:id/edit", async (req, res) => {
     const validPokemonSet = req.app.locals.validPokemonSet;
     for (const name of sanitizedPokemons) {
         if (!validPokemonSet.has(name)) {
-            return res.status(400).send(`Invalid Pokémon: ${name}`);
+            return res.status(400).send(`Invalid Pokemon: ${name}`);
         }
     }
 
@@ -253,7 +273,7 @@ router.post("/team/:id/edit", async (req, res) => {
         });
         const typesSummary = Array.from(typeSet).join(",");
         const effectiveness = totalExp;
-
+        effectiveness.toFixed(1);
         const teamName = req.body.name;
 
     

@@ -14,19 +14,29 @@
 
     <div class="team-details-wrapper">
         {{#team.pokemonDetails}}
-
         <div class="pokemon-box">
-            
             <div class="pokemon-info">
                 <h2 class="pokemon-name-details">{{name}}</h2>
                 <div class="pokemon-types-details">
-                {{#types}}
+                {{#typeNames}}
                     <div class="type-item">
                         <img class="type-icon" src="/images/{{.}}Type.png" alt="{{.}} type">
                         <span class="type-name-details">{{.}}</span>
                     </div>
-                {{/types}}
+                {{/typeNames}}
                 </div>
+
+                <div class="effective-against">
+                    <h4>Effective Against:</h4>
+                    <div class="effect-items-wrapper">
+                        {{#effectiveAgainst}}
+                        <div class="effect-item">
+                            <img class="effect-type-icon" src="/images/{{.}}Type.png" alt="{{.}} type">
+                        </div>
+                        {{/effectiveAgainst}}
+                    </div>
+                </div>
+
             </div>
 
             <div class="pokemon-stats">

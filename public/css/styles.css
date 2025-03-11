@@ -546,23 +546,40 @@ body.team-details-page {
   body {
     padding-top: 600px;
   }
-
   #team-details-page .team-details-wrapper {
     grid-template-columns: 1fr;
   }
-
   #team-details-page h1 {
     font-size: 36px;
   }
-
   #team-details-page .mainButton {
     font-size: 24px;
     padding: 15px 30px;
   }
-
  .teams-container {
     flex-direction: column;
     margin-top: 40px;
   }
+}
 
+
+.effective-against {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  max-width: 100px;
+}
+.effect-items-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+.effect-type-icon {
+  width: 30px;
+  height: auto;
+}
+.effective-against h4 {
+  margin-bottom: 0;
 }
