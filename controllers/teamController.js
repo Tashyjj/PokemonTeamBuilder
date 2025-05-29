@@ -184,9 +184,9 @@ router.post("/create", async (req, res) => {
         
         //fixing effectiveness
         const effectiveness = totalExp;
-        const createdAt = new Date().toISOString();
+        
         effectiveness.toFixed(1);
-        TeamsDB.insertTeam(teamName, sanitizedPokemons, typesSummary, effectiveness, createdAt, (err) => {
+        TeamsDB.insertTeam(teamName, sanitizedPokemons, typesSummary, effectiveness, (err) => {
             if (err) {
                 console.error("Error inserting new team:", err);
                 return res.status(500).send("Error saving team");

@@ -1,61 +1,68 @@
-//Build funny db here later
+const { Team } = require('./index');
 
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./data/teams.db');
+// Create new team
+exports.insertTeam = async (teamName, pokemons, types, effectiveness, callback) => {
+  try {
+    const pokemonList = Array.isArray(pokemons) ? pokemons.join(',') : '';
+    const team = await Team.create({
+      team_name: teamName,
+      pokemon_list: pokemonList,
+      types_summary: types,
+      moves_stats: null,
+      effectiveness
 
+    });
+    callback(null, team);
+  } catch (err) {
+    callback(err);
+  }
+};
 
-db.serialize(() => { //figured it out
-    db.run(`CREATE TABLE IF NOT EXISTS teams (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        team_name TEXT, 
-        pokemon_list TEXT, 
-        types_summary TEXT, 
-        moves_stats TEXT, 
-        effectiveness REAL, 
-        created_at TEXT)`);
-});
+// Get all teams
+exports.getAllTeams = async (callback) => {
+  try {
+    const teams = await Team.findAll();
+    callback(null, teams);
+  } catch (err) {
+    callback(err);
+  }
+};
 
-//new team
-exports.insertTeam = (teamName, pokemons, types, effectiveness, createdAt, callback) => {
-    const pokemonList = Array.isArray(pokemons) ? pokemons.join(",") : "";
-    const typesSummary = types;
+// Get team by ID
+exports.getTeamById = async (id, callback) => {
+  try {
+    const team = await Team.findByPk(id);
+    callback(null, team);
+  } catch (err) {
+    callback(err);
+  }
+};
 
-    db.run(
-      `INSERT INTO teams (team_name, pokemon_list, types_summary, moves_stats, effectiveness, created_at)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [teamName, pokemonList, typesSummary, null, effectiveness, createdAt],
-      callback
+// Delete team
+exports.deleteTeam = async (id, callback) => {
+  try {
+    await Team.destroy({ where: { id } });
+    callback(null);
+  } catch (err) {
+    callback(err);
+  }
+};
+
+// Update team
+exports.updateTeam = async (teamId, teamName, pokemons, typesSummary, effectiveness, callback) => {
+  try {
+    const pokemonList = Array.isArray(pokemons) ? pokemons.join(',') : '';
+    await Team.update(
+      {
+        team_name: teamName,
+        pokemon_list: pokemonList,
+        types_summary: typesSummary,
+        effectiveness
+      },
+      { where: { id: teamId } }
     );
-  };
-
-//getting all teams
-exports.getAllTeams = (callback) => {
-    db.all('SELECT * FROM teams', callback);
+    callback(null);
+  } catch (err) {
+    callback(err);
+  }
 };
-
-//getting a specific team
-exports.getTeamById = (id, callback) => {
-    db.get("SELECT * FROM teams WHERE id = ?", [id], callback);
-};
-
-//gonna add the other fucntionality here too later
-
-//deleting teams
-exports.deleteTeam = (id, callback) => {
-    db.run("DELETE FROM teams WHERE id = ?", [id], callback);
-};
-  
-
-//updating teams
-exports.updateTeam = (teamId, teamName, pokemons, typesSummary, effectiveness, callback) => {
-    const pokemonList = Array.isArray(pokemons) ? pokemons.join(",") : "";
-    db.run(
-        `UPDATE teams 
-        SET team_name = ?, pokemon_list = ?, types_summary = ?, effectiveness = ?
-        WHERE id = ?`,
-        [teamName, pokemonList, typesSummary, effectiveness, teamId],
-        callback
-    );
-};
-  
-
-exports.db = db;
