@@ -1,7 +1,7 @@
-//import './App.css'; idk if Ill need this later, it came with the npm create-react-app command
 const express = require('express');
 const mustacheExpress = require('mustache-express');
 const path = require('path');
+const { sequelize } = require('./models');
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -55,15 +55,19 @@ loadAllPokemonNames()
 
     console.log("Loaded all pokemon names, server starting...");
 
-    
-    //app.locals.validPokemonSet = validPokemonSet;
+    sequelize.sync()
+      .then(() => {
+        console.log('Database synced');
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+      })
+      .catch(err => {
+        console.error('Database sync failed:', err);
+        process.exit(1);
+      });
 
-    app.listen(3001, () => {
-      console.log('Server is running on Port 3001');
-    });
   })
-
   .catch((err) => {
-    console.error("Couldnt load pokemon data:", err);
-    process.exit(1);
+    console.error("Could not load pokemon data:", err);
+    process.exit(1);  
   });
